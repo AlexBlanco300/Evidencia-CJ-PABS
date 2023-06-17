@@ -32,8 +32,26 @@ class Cita{
     }
 }
 
+class Validar{
+    String usuario;
+    String password;
+    protected HashMap<String,String> passwordsHM = new HashMap<>();
+//    public Validar(String usua, String passw){
+//        this.usuario  = usua;
+//        this.password = passw;
+//    }
+    public void agregarUsario(String us, String pw){
+        passwordsHM.put(us,pw);
+    }
+}
+
 public class Main {
     public static void main(String[] args) throws IOException {
+        Validar passwords = new Validar();
+        passwords.agregarUsario("Profesor","123");
+        passwords.agregarUsario("profesor","123");
+        passwords.agregarUsario("Alex","123");
+
         String opcion = "";
         String resp   = "";
         String archDoctores  = "src/db/doctores.txt";
@@ -50,82 +68,105 @@ public class Main {
 
 
         System.out.println("Bienvenido a la Administración de citas");
-        System.out.println("Elige una opción:");
+        System.out.println("Escriba su usuario: ");
+        String user = br.readLine();
+        System.out.println("Escriba su contraseña: ");
+        String contras = br.readLine();
 
-        do {
-            System.out.println("1- Dar de alta un doctor\n2- Dar de alta un paciente\n3- Crear cita\n");
-            opcion = br.readLine();
-            switch( opcion ) {
-                case "1":
-                    System.out.println("Escribe el id único del doctor:");
-                    String id = br.readLine();
-                    System.out.println("Escribe el nombre del doctor:");
-                    String nom = br.readLine();
-                    System.out.println("Escribe la especialidad del doctor:");
-                    String esp = br.readLine();
+        if (!passwords.passwordsHM.containsKey(user)){
+            System.out.println("Ingrese una contraseña valida porfavor. (Profesor y 123 | profesor y 123 | Alex y 123 | alex y 123)");
+        } else{
+            System.out.println("Elige una opción:");
 
-                    Doctor doc = new Doctor(id,nom,esp);
-                    listaDoctores.add(doc);
-                    try {
-                        brGuardar.write(id+"-"+nom+"-"+esp+"\n");
-                    } catch (IOException e){
-                        System.out.println("Error: " + e.getMessage());
-                    } finally {
-                        brGuardar.flush();
-                    }
-                    break;
-                case "2":
-                    System.out.println("Escribe el id único del Paciente:");
-                    String idP = br.readLine();
-                    System.out.println("Escribe el nombre del Paciente:");
-                    String nomP = br.readLine();
+            do {
+                System.out.println("1- Dar de alta un doctor\n2- Dar de alta un paciente\n3- Crear cita\n4- Mostrar citas agendadas\n5- Salir");
+                opcion = br.readLine();
+                switch( opcion ) {
+                    case "1":
+                        System.out.println("Escribe el id único del doctor:");
+                        String id = br.readLine();
+                        System.out.println("Escribe el nombre del doctor:");
+                        String nom = br.readLine();
+                        System.out.println("Escribe la especialidad del doctor:");
+                        String esp = br.readLine();
 
-                    Paciente paci = new Paciente(idP,nomP);
-                    listaPacientes.add(paci);
-                    try {
-                        bwGuardarPacientes.write(idP+"-"+nomP+"\n");
-                    } catch (IOException e){
-                        System.out.println("Error: " + e.getMessage());
-                    } finally {
-                        bwGuardarPacientes.flush();
-                    }
-                    break;
-                case "3":
-                    System.out.println("Con que doctor desea atenderse?:");
-                    System.out.println("Escriba el id del doctor:");
-                    String idD = br.readLine();
-                    System.out.println("Escriba el nombre del doctor:");
-                    String nombreD = br.readLine();
-                    System.out.println("Escriba la especialidad del doctor:");
-                    String espD = br.readLine();
-                    String doctorCita = idD+"-"+nombreD+""+espD;
-
-                    if ( !listaDoctores.contains(doctorCita) ){
-                        System.out.println("El doctor que escribio no está registrado.");
-                    } else{
-                        System.out.println("Quien desea atenderse?:");
-                        System.out.println("Escriba el id del paciente:");
-                        String idPa = br.readLine();
-                        System.out.println("Escriba el nombre del paciente:");
-                        String nombreP = br.readLine();
-                        String pacCita = idPa+"-"+nombreP;
-                        if ( !listaPacientes.contains(pacCita) ){
-                            System.out.println("El paciente que escribio no está registrado.");
-                        } else {
-                            Cita citaAgendada = new Cita(doctorCita, pacCita);
-                            listaCitas.add(citaAgendada);
+                        Doctor doc = new Doctor(id,nom,esp);
+                        listaDoctores.add(doc);
+                        try {
+                            brGuardar.write(id+"-"+nom+"-"+esp+"\n");
+                        } catch (IOException e){
+                            System.out.println("Error: " + e.getMessage());
+                        } finally {
+                            brGuardar.flush();
                         }
-                    }
-                    break;
-                case "4":
-                    break;
-                default:
-                    System.out.println("La opción elegida no es válida.");
-                    break;
-            }
-            System.out.println("Deseas ejecutar otra acción? (S/s para mostrar menú nuevamente o presiona cualquier otra tecla para salir)");
-            resp = br.readLine();
-        } while( resp.equals("S") || resp.equals("s") );
+                        break;
+                    case "2":
+                        System.out.println("Escribe el id único del Paciente:");
+                        String idP = br.readLine();
+                        System.out.println("Escribe el nombre del Paciente:");
+                        String nomP = br.readLine();
+
+                        Paciente paci = new Paciente(idP,nomP);
+                        listaPacientes.add(paci);
+                        try {
+                            bwGuardarPacientes.write(idP+"-"+nomP+"\n");
+                        } catch (IOException e){
+                            System.out.println("Error: " + e.getMessage());
+                        } finally {
+                            bwGuardarPacientes.flush();
+                        }
+                        break;
+                    case "3":
+                        System.out.println("Con que doctor desea atenderse?:");
+                        System.out.println("Escriba el id del doctor:");
+                        String idD = br.readLine();
+                        System.out.println("Escriba el nombre del doctor:");
+                        String nombreD = br.readLine();
+                        System.out.println("Escriba la especialidad del doctor:");
+                        String espD = br.readLine();
+                        String doctorCita = idD+"-"+nombreD+""+espD;
+
+                        if ( !listaDoctores.contains(doctorCita) ){
+                            System.out.println("El doctor que escribio no está registrado.");
+                        } else{
+                            System.out.println("Quien desea atenderse?:");
+                            System.out.println("Escriba el id del paciente:");
+                            String idPa = br.readLine();
+                            System.out.println("Escriba el nombre del paciente:");
+                            String nombreP = br.readLine();
+                            String pacCita = idPa+"-"+nombreP;
+                            if ( !listaPacientes.contains(pacCita) ){
+                                System.out.println("El paciente que escribio no está registrado.");
+                            } else {
+                                Cita citaAgendada = new Cita(doctorCita, pacCita);
+                                listaCitas.add(citaAgendada);
+                            }
+                        }
+                        break;
+                    case "4":
+                        if ( listaCitas.size() == 0 ){
+                            System.out.println("Ninguna cita registrada aún");
+                        } else {
+                            for (Cita cita: listaCitas) System.out.println(cita);
+                        }
+                        break;
+                    case "5":
+                        System.out.println("Gracias por hacer uso de nuestro sistema.");
+                        break;
+                    default:
+                        System.out.println("La opción elegida no es válida.");
+                        return;
+                }
+                System.out.println("Deseas ejecutar otra acción? (S/s para mostrar menú nuevamente o presiona cualquier otra tecla para salir)");
+                resp = br.readLine();
+            } while( resp.equals("S") || resp.equals("s") );
+        }
+
+        System.out.printf("Fin del programa.");
+
+
+
+
 
 
 
