@@ -24,7 +24,12 @@ class Paciente{
     }
 }
 class Cita{
-
+    String doctor;
+    String paciente;
+    public Cita(String doc, String pac){
+        this.doctor = doc;
+        this.paciente = pac;
+    }
 }
 
 public class Main {
@@ -40,6 +45,7 @@ public class Main {
 
         ArrayList<Doctor> listaDoctores    = new ArrayList<Doctor>();
         ArrayList<Paciente> listaPacientes = new ArrayList<Paciente>();
+        ArrayList<Cita> listaCitas = new ArrayList<Cita>();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 
@@ -47,7 +53,7 @@ public class Main {
         System.out.println("Elige una opción:");
 
         do {
-            System.out.println("1- Dar de alta un doctor\n2- Dar de alta un paciente\n3- ");
+            System.out.println("1- Dar de alta un doctor\n2- Dar de alta un paciente\n3- Crear cita\n");
             opcion = br.readLine();
             switch( opcion ) {
                 case "1":
@@ -85,6 +91,31 @@ public class Main {
                     }
                     break;
                 case "3":
+                    System.out.println("Con que doctor desea atenderse?:");
+                    System.out.println("Escriba el id del doctor:");
+                    String idD = br.readLine();
+                    System.out.println("Escriba el nombre del doctor:");
+                    String nombreD = br.readLine();
+                    System.out.println("Escriba la especialidad del doctor:");
+                    String espD = br.readLine();
+                    String doctorCita = idD+"-"+nombreD+""+espD;
+
+                    if ( !listaDoctores.contains(doctorCita) ){
+                        System.out.println("El doctor que escribio no está registrado.");
+                    } else{
+                        System.out.println("Quien desea atenderse?:");
+                        System.out.println("Escriba el id del paciente:");
+                        String idPa = br.readLine();
+                        System.out.println("Escriba el nombre del paciente:");
+                        String nombreP = br.readLine();
+                        String pacCita = idPa+"-"+nombreP;
+                        if ( !listaPacientes.contains(pacCita) ){
+                            System.out.println("El paciente que escribio no está registrado.");
+                        } else {
+                            Cita citaAgendada = new Cita(doctorCita, pacCita);
+                            listaCitas.add(citaAgendada);
+                        }
+                    }
                     break;
                 case "4":
                     break;
