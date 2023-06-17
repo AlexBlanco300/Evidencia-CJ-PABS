@@ -16,7 +16,12 @@ class Doctor{
     }
 }
 class Paciente{
-
+    String id;
+    String nombre;
+    public Paciente(String id, String nom){
+        this.id = id;
+        this.nombre = nom;
+    }
 }
 class Cita{
 
@@ -30,8 +35,11 @@ public class Main {
         String archPacientes = "src/db/pacientes.txt";
         BufferedWriter bw = null;
         BufferedWriter brGuardar = new BufferedWriter(new FileWriter(archDoctores));
+        BufferedWriter bwGuardarPacientes = new BufferedWriter(new FileWriter(archPacientes));
 
-        ArrayList<Doctor> listaDoctores = new ArrayList<Doctor>();
+
+        ArrayList<Doctor> listaDoctores    = new ArrayList<Doctor>();
+        ArrayList<Paciente> listaPacientes = new ArrayList<Paciente>();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 
@@ -39,15 +47,15 @@ public class Main {
         System.out.println("Elige una opción:");
 
         do {
-            System.out.println("1-Dar de alta un doctor\n2- \n3- ");
+            System.out.println("1- Dar de alta un doctor\n2- Dar de alta un paciente\n3- ");
             opcion = br.readLine();
             switch( opcion ) {
                 case "1":
-                    System.out.println("Escribe el id único del doctor;");
+                    System.out.println("Escribe el id único del doctor:");
                     String id = br.readLine();
-                    System.out.println("Escribe el nombre del doctor;");
+                    System.out.println("Escribe el nombre del doctor:");
                     String nom = br.readLine();
-                    System.out.println("Escribe la especialidad del doctor;");
+                    System.out.println("Escribe la especialidad del doctor:");
                     String esp = br.readLine();
 
                     Doctor doc = new Doctor(id,nom,esp);
@@ -59,9 +67,22 @@ public class Main {
                     } finally {
                         brGuardar.flush();
                     }
-
                     break;
                 case "2":
+                    System.out.println("Escribe el id único del Paciente:");
+                    String idP = br.readLine();
+                    System.out.println("Escribe el nombre del Paciente:");
+                    String nomP = br.readLine();
+
+                    Paciente paci = new Paciente(idP,nomP);
+                    listaPacientes.add(paci);
+                    try {
+                        bwGuardarPacientes.write(idP+"-"+nomP+"\n");
+                    } catch (IOException e){
+                        System.out.println("Error: " + e.getMessage());
+                    } finally {
+                        bwGuardarPacientes.flush();
+                    }
                     break;
                 case "3":
                     break;
